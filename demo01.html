@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue学习01</title>
+    <script type="text/javascript" src="lib/vue.js"></script>
+</head>
+<body id="body-s">
+    <div id="app">
+        {{message}}
+        <div>
+            <span v-bind:title="titleMessage">
+                鼠标悬停几秒钟查看此处动态绑定的提示信息！
+            </span>
+        </div>
+        <p v-if="seen">现在你看到我了</p>
+        <ol>
+            <li v-for="todo in todos">
+                {{todo.text}}
+            </li>
+        </ol>
+        <button v-on:click="reverseMessage">逆转消息{{ reversedMessage }}ssss{{test | filterA}}</button>
+        <input v-model="message">
+        <ul>
+            <!-- 创建一个todo-item 组件实例 -->
+            <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
+        </ul>
+        <div>
+            {{fullName}}
+        </div>
+    </div>
+
+    <div id="watch-example">
+        <p>
+            Ask a yes/no question:
+            <input v-model="question">
+        </p>
+        <p>{{ answer }}</p>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    Vue.component('todo-item', {
+        props: ['todo'],
+        template: '<li>{{todo.text}}</li>'
+    });
+
+    var app = new Vue({
+        el: '#app',
+        beforeCreate: function () {
+            console.log('beforeCreate');
+        },
+        created: function () {
+            console.log('create');
+        },
+        beforeUpdate: function (ss) {
+            console.log('beforeUpdate');
+        },
+        updated: function (info) {
+            console.log(`updated: ${info}`);
+        },
+        data: {
+            message: 'Hello Vue!!',
+            titleMessage: `业务加载与: ${new Date()}`,
+            seen: true,
+            todos: [
+                {text: '学习javascript'},
+                {text: '学习vue'},
+                {text: '整个牛项目'}
+            ],
+            groceryList: [
+                { text: '蔬菜' },
+                { text: '奶酪' },
+                { text: '随便其他什么人吃的东西' }
+            ],
+            test: 10,
+            firstName: 'lynn',
+            lastName: 'chen'
+        },
+        methods:{
+            reverseMessage: function () {
+                this.message = this.message.split('').reverse().join('');
+            }
+        },
+        // 过滤器
+        filters: {
+            filterA: function (value) {
+                return value + 1;
+            }
+        },
+        watch:{
+            message: function (value) {
+                console.log(value + 1111);
+            }
+        },
+        // 计算属性
+        computed: {
+            // a computed getter
+            reversedMessage: function () {
+                // `this` points to the vm instance
+                return this.message.split('').reverse().join('')
+            },
+            fullName: function () {
+                return this.firstName + ' ' + this.lastName;
+            }
+        }
+    });
+
+    var watchExampleVM = new Vue({
+        el: '#watch-example',
+        data: {
+            question: '',
+            answer: 'I cannot give you an answer until you ask a question!'
+        },
+        watch: {
+            // 如果 question 发生改变，这个函数就会运行
+            question: function (newQuestion) {
+                this.answer = 'Waiting for you to stop typing...'
+                this.getAnswer()
+            }
+        },
+        methods: {
+            getAnswer:
+                    function () {
+                        var vm = this
+                        if (this.question.indexOf('?') === -1) {
+                            vm.answer = 'Questions usually contain a question mark. ;-)'
+                            return
+                        }
+                        vm.answer = 'Thinking...'
+                        axios.get('https://yesno.wtf/api')
+                                .then(function (response) {
+                                    vm.answer = _.capitalize(response.data.answer)
+                                })
+                                .catch(function (error) {
+                                    vm.answer = 'Error! Could not reach the API. ' + error
+                                })
+                    }
+
+        }
+    });
+</script>

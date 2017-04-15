@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单控制</title>
+    <script type="text/javascript" src="lib/vue.js"></script>
+</head>
+<body>
+    <div id="form01">
+        <input v-model="message" placeholder="edit me!!">
+        <p>{{ message }}</p>
+    </div>
+    <hr/><br/>
+    <div id="form02">
+        <span>Multiline message is:</span>
+        <p style="white-space: pre">{{ message }}</p>
+        <br/>
+        <textarea v-model="message" placeholder="add multiple lines" rows="14" cols="54"></textarea>
+    </div>
+    <hr/><br/>
+    <div id="form03">
+        <input type="checkbox" id="checkbox" v-model="checked" value="Test"/>
+        <label for="checkbox">{{ checked }}</label>
+    </div>
+    <hr/><br/>
+    <div id="form04">
+        <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+        <label for="jack">Jack</label>
+        <input type="checkbox" id="john" value="John" v-model="checkedNames">
+        <label for="john">John</label>
+        <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+        <label for="mike">Mike</label>
+        <br>
+        <span>Checked names: {{ checkedNames }}</span>
+    </div>
+
+    <hr/><br/>
+    <div id="form05">
+        <input type="radio" id="one" value="One" v-model="picked"/>
+        <label for="one">One</label>
+        <br>
+        <input type="radio" id="two" value="Two" v-model="picked">
+        <label for="two">Two</label>
+        <br>
+        <span>Picked: {{ picked }}</span>
+    </div>
+
+    <hr/><br/>
+    <div id="form06">
+        <select v-model="selected">
+            <option value="1">A</option>
+            <option value="2">B</option>
+            <option value="3">C</option>
+        </select>
+        <br/>
+        <span>Selected: {{ selected }}</span>
+    </div>
+
+    <hr/><br/>
+    <div id="form07">
+        <select v-model="selected" multiple style="width: 100px">
+            <option value="1">A</option>
+            <option value="2">B</option>
+            <option value="3">C</option>
+        </select>
+        <br/>
+        <span>Selected: {{ selected }}</span>
+    </div>
+
+    <hr/><br/>
+    <div id="form08">
+        <select v-model="selected">
+            <option v-for="option in options" v-bind:vlaue="option.value">
+                {{ option.text }}
+            </option>
+        </select>
+        <br/>
+        <span>Selected: {{ selected }}</span>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vm01 = new Vue({
+        el: '#form01',
+        data: {
+            message: ''
+        }
+    });
+
+    var vm02 = new Vue({
+        el: '#form02',
+        data: {
+            message: '哈哈'
+        }
+    });
+
+    var vm03 = new Vue({
+        el: '#form03',
+        data: {
+            checked: true
+        }
+    });
+
+    var vm04 = new Vue({
+        el: '#form04',
+        data: {
+            checkedNames: []
+        }
+    });
+
+    var vm05 = new Vue({
+        el: '#form05',
+        data: {
+            picked: ''
+        }
+    });
+
+    var vm06 = new Vue({
+        el: '#form06',
+        data: {
+            selected: null
+        }
+    });
+
+
+    var vm07 = new Vue({
+        el: '#form07',
+        data: {
+            selected: null
+        }
+    });
+
+    var vm08 = new Vue({
+        el: '#form08',
+        data: {
+            selected: null,
+            options: [
+                { text: 'One', value: 'A' },
+                { text: 'Two', value: 'B' },
+                { text: 'Three', value: 'C' }
+            ]
+        }
+    });
+</script>

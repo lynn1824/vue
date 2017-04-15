@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>for循环</title>
+    <script type="text/javascript" src="lib/vue.js"></script>
+</head>
+<body>
+    <div id="for01">
+        <ul>
+            <li v-for="item in items">
+                id: {{item.id}} --- message:{{item.message}}
+            </li>
+        </ul>
+    </div>
+
+    <div id="for02">
+        <ul>
+            <li v-for="(item, index) of items">
+                {{parentMessage}}--- id: {{item.id}} --- message:{{item.message}}---index:{{index}}
+            </li>
+        </ul>
+    </div>
+
+    <div id="for03">
+        <ul>
+            <template v-for="item in items">
+                <li>{{ item.msg }}</li>
+                <li class="divider">哈哈</li>
+            </template>
+        </ul>
+    </div>
+
+    <div id="for04">
+        <ul>
+            <li v-for="(value, key, index) of objects">
+                {{key}} : {{value}} --- index: {{index}}
+            </li>
+        </ul>
+    </div>
+
+    <div id="for05">
+        <ul>
+            <li v-for="i of 10">
+                {{i}}
+            </li>
+        </ul>
+    </div>
+
+    <div id="for06">
+        <input v-model="newTodoText" @keyup.enter="addNewTodo" placeholder="Add a todo"/>
+        <ul>
+            <li is="todo-item" v-for="(todo, index) in todos" :title="todo" @remove="todos.splice(index, 1)"></li>
+        </ul>
+    </div>
+
+    <div id="for07">
+        <ul>
+            <li v-for="item of items" :key="item.id">{{item.message}}</li>
+        </ul>
+    </div>
+
+    <div id="for08">
+        <ul>
+            <li v-for="n of eventNumbers">{{ n }}</li>
+        </ul>
+    </div>
+
+    <div id="for09">
+        <ul>
+            <li v-for="n of eventNumbers(numbers)">{{ n }}</li>
+        </ul>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vm01 = new Vue({
+        el: '#for01',
+        data: {
+            items: [
+                {
+                    id: 1,
+                    message: 'aaaa'
+                },
+                {
+                    id: 2,
+                    message: 'bbbb'
+                }
+            ]
+        }
+    });
+
+    var vm02 = new Vue({
+        el: '#for02',
+        data: {
+            parentMessage: 'parent',
+            items: [
+                {id: 1, message:'a'},
+                {id: 2, message:'b'}
+            ]
+        }
+    });
+
+    var vm03 = new Vue({
+        el: '#for03',
+        data: {
+            items: [
+                {msg: 'a'},
+                {msg: 'b'},
+                {msg: 'c'}
+            ]
+        }
+    });
+
+    var vm04 = new Vue({
+        el: '#for04',
+        data: {
+            objects: {
+                name: 'jason',
+                age: 28,
+                sex: 'man',
+                smallName: '小凌子冲'
+            }
+        }
+    });
+
+    var vm05 = new Vue({
+        el: '#for05'
+    });
+
+    Vue.component('todo-item', {
+        template: '\
+                    <li>\
+                      {{ title }}\
+                      <button v-on:click="$emit(\'remove\')">X</button>\
+                    </li>\
+                  ',
+        props: ['title']
+    });
+
+    var vm06 = new Vue({
+        el: '#for06',
+        data: {
+            newTodoText: '',
+            todos: [
+                'Do the dishes',
+                'Take out the trash',
+                'Mow the lawn'
+            ]
+        },
+        methods: {
+            addNewTodo: function () {
+                this.todos.push(this.newTodoText);
+                this.newTodoText = '';
+            }
+        }
+    });
+
+    var vm07 = new Vue({
+        el: '#for07',
+        data: {
+            items: [
+                {id: 1, message: 'jason'},
+                {id: 2, message: 'good!!'}
+            ]
+        }
+    });
+
+    var vm08 = new Vue({
+        el: '#for08',
+        data: {
+            numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        },
+        computed: {
+            eventNumbers: function () {
+                return this.numbers.filter(function (number) {
+                    return number % 2 === 0;
+                });
+            }
+        }
+    });
+
+    var vm09 = new Vue({
+        el: '#for09',
+        data: {
+            numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        },
+        methods: {
+            eventNumbers: function (numbers) {
+                return this.numbers.filter(function (number) {
+                    return number % 2 === 0;
+                });
+            }
+        }
+    });
+</script>

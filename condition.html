@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>条件渲染</title>
+    <script type="text/javascript" src="lib/vue.js"></script>
+</head>
+<body>
+    <div id="condition01">
+        <h1 v-if="ok">YES</h1> <!--单个元素-->
+        <h1 v-else>NO</h1>
+
+        <template v-if="ok">
+            <h1>Condition</h1>
+            <h1>Pragraph 01</h1>
+            <h1>Pragraph 02</h1>
+        </template>
+        <template v-else>
+            <h1>Condition_else</h1>
+        </template>
+
+        <div v-if="type === 'A'">
+            <h2>A</h2>
+        </div>
+        <div v-else-if="type === 'B'">
+            <h2>B</h2>
+        </div>
+        <div v-else-if="type === 'C'">
+            <h2>C</h2>
+        </div>
+        <div v-else>
+            <h2>D</h2>
+        </div>
+    </div>
+
+    <div id="condition02">
+        <template v-if="loginType === 'username'">
+            <label>username:</label>
+            <input placeholder="请输入用户名" key="username-ipt"/>
+        </template>
+        <template v-else>
+            <label>email:</label>
+            <input placeholder="请输入邮箱" key="email-ipt"/>
+        </template>
+        <button @click="changeLoginType">change login type</button>
+    </div>
+
+    <div id="condition03">
+        <h1 v-show="ok">哈哈哈</h1>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var cdt01 = new Vue({
+        el: '#condition01',
+        data: {
+            ok: true,
+            type: 'A'
+        }
+    });
+
+    var cdt02 = new Vue({
+        el: '#condition02',
+        data: {
+            loginType: 'username'
+        },
+        methods: {
+            changeLoginType: function () {
+                this.loginType = this.loginType == 'username' ? 'email' : 'username';
+            }
+        }
+    });
+
+    var cdt03 = new Vue({
+        el: '#condition03',
+        data: {
+            ok: true
+        }
+    });
+</script>

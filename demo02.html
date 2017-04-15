@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue学习02</title>
+    <script type="text/javascript" src="lib/vue.js"></script>
+    <style type="text/css">
+        .static {
+            width: 300px;
+            height: 100px;
+            position: absolute;
+            top: calc(50% - 50px);
+            bottom: calc(50% - 50px);
+            left: calc(50% - 150px); // css3 calc
+        }
+        .static2 {
+            width: 300px;
+            height: 100px;
+            position: absolute;
+            top: calc(50% - 50px);
+            bottom: calc(50% - 50px);
+        }
+        .active {
+            text-align: center;
+            color: red;
+            line-height: 100px;
+        }
+        .text-danger {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app01">
+        <div :class="{active: isActive, 'text-danger': hasError}" class="static">
+            hi, vue01
+        </div>
+    </div>
+    <div id="app02">
+        <div :class="classObj" class="static2">
+            hi, vue02
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vm = new Vue({
+        el: '#app01',
+        data: {
+            isActive: true,
+            hasError: true
+        }
+    });
+
+    var vm2 = new Vue({
+        el: '#app02',
+        data: {
+            isActive: true,
+            error: null
+        },
+        computed: {
+            classObj: function () {
+                return {
+                    active: this.error ? true : false,
+                    'text-danger': this.error ? true: false
+                }
+            }
+        }
+    });
+</script>

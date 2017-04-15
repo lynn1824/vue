@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件处理</title>
+    <script type="text/javascript" src="lib/vue.js"></script>
+</head>
+<body>
+    <div id="evt01">
+        <button v-on:click="count += 1">增加 1</button>
+        <p>这个按钮被点击了 {{count}} 次</p>
+    </div>
+    <hr/>
+    <div id="evt02">
+        <!-- `greet` 是在下面定义的方法名 -->
+        <button v-on:click="greet">Greet</button>
+    </div>
+    <hr/>
+    <div id="evt03">
+        <button v-on:click="say(name)">Say 哈哈</button>
+        <button v-on:click="say('hello')">Say hello</button>
+    </div>
+    <hr/>
+    <div id="evt04" v-on:click="prentFn">
+        <a href="http://www.baidu.com" v-on:click="say(name, $event);">百度1</a>
+        <a href="http://www.baidu.com" v-on:click.stop="say(name, $event);">百度2(我阻止了冒泡)</a>
+        <a href="http://www.baidu.com" v-on:click.prevent="say(name, $event);">百度3(我阻止了默认事件)</a>
+        <a href="http://www.baidu.com" v-on:click.capture="say(name, $event);">百度4(事件以捕获的方式进行)</a>
+        <a href="http://www.baidu.com" v-on:click.once.prevent="say(name, $event);">百度5(只触发一次,并阻止默认事件触发)</a>
+    </div>
+    <hr/>
+    <div id="evt05">
+        <!-- 只有回车时才触发submit, 有时候记住keyCode比较困难 -->
+        <input v-on:keyup.13="submit('13');" placeholder="keyup.13"/>
+        <input v-on:keyup.enter="submit('enter');" placeholder="keyup.enter"/>
+        <input v-on:keyup.tab="submit('tab');" placeholder="keyup.tab"/>
+        <input v-on:keyup.delete="submit('delete');" placeholder="keyup.delete"/>
+        <input v-on:keyup.space="submit('space');" placeholder="keyup.space"/>
+        <input v-on:keyup.up="submit('up');" placeholder="keyup.up"/>
+        <input v-on:keyup.down="submit('down');" placeholder="keyup.down"/>
+        <input v-on:keyup.left="submit('left');" placeholder="keyup.left"/>
+        <input v-on:keyup.right="submit('right');" placeholder="keyup.right"/>
+    </div>
+    <hr/>
+    <div id="evt06">
+        <input @keyup.alt.67="fn">
+        <!-- Ctrl + Click -->
+        <input type="text" v-on:click.ctrl="doSomething" placeholder="点击或者回车都触发"/>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vm01 = new Vue({
+        el: '#evt01',
+        data: {
+            count: 0
+        }
+    });
+
+    var vm02 = new Vue({
+        el: '#evt02',
+        data: {
+            name: 'Vue.js'
+        },
+        methods: {
+            greet: function () {
+                // 'this'指向当前vue实例vm02
+                alert('Hello ' + this.name + '!'); // Hello Vue.js
+                // 'event' 是原生的DOM事件
+                alert(event.target.tagName); // BUTTON
+            }
+        }
+    });
+
+    var vm03 = new Vue({
+        el: '#evt03',
+        data: {
+            name: '哈哈'
+        },
+        methods: {
+            say: function (message) {
+                alert(message);
+            }
+        }
+    });
+
+    var vm04 = new Vue({
+        el: '#evt04',
+        data: {
+            name: '哈哈'
+        },
+        methods: {
+            say: function (message, event) {
+                alert(message);
+                // event.preventDefault(); // 阻止默认事件
+            },
+            prentFn: function () {
+                alert('我是父亲!!');
+            }
+        }
+    });
+
+    var vm05 = new Vue({
+        el: '#evt05',
+        data: {
+            name: '哈哈哈哈'
+        },
+        methods: {
+            submit: function (message) {
+                alert(message);
+            }
+        }
+    });
+
+    var vm06 = new Vue({
+        el: '#evt06',
+        data: {
+            name: '哈哈哈6'
+        },
+        methods: {
+            fn: function () {
+                alert('加油,尽全力!!');
+            },
+            doSomething: function () {
+                alert('do someting!!');
+            }
+        }
+    });
+</script>
