@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue组件(核心)</title>
+    <script type="text/javascript" src="lib/vue.js"></script>
+</head>
+<body>
+    <div id="cpn01">
+        <div class="parent">
+            <child v-bind:test-data="test" @emitfn="emitFnss">
+                <template scope="props">
+                    <span>hello from parent</span><br/>
+                    <span>{{ props.text }}</span><br/>
+                    <span>{{ props.value }}</span><br/>
+                    <button v-on:click="testFn">点我试试</button>
+                    <button>点我试试2</button>
+                </template>
+            </child>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    Vue.component('child', {
+        template: '<div class="child"><a v-on:click="testFn">哈哈哈</a><slot text="hello from child" v-bind:value="hahaVal"></slot></div>',
+        props: ['testData'],
+        data: function(){
+             return {
+                 hahaVal: 10
+             }
+        },
+        methods: {
+            testFn: function () {
+                // alert(this.testData);
+                this.$emit('emitfn', this.testData, 'child');
+            }
+        }
+    });
+
+    var vm01 = new Vue({
+        el: '#cpn01',
+        data: {
+            test: '呵呵'
+        },
+        methods: {
+            testFn: function () {
+                alert('parent');
+            },
+            emitFnss: function (aa, bb) {
+                alert('哈哈' + ' ' + aa + ' ' + bb);
+            }
+        }
+    });
+</script>

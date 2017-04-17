@@ -6,6 +6,200 @@
     <script type="text/javascript" src="lib/vue.js"></script>
 </head>
 <body>
+    <div id="cpn01">
+        <my-component></my-component>
+    </div>
 
+    <hr/><br/>
+    <div id="cpn02">
+        <input v-model="message" placeholder="请输入值"/>
+        <child v-bind:my-message="message"></child>
+    </div>
+
+    <hr/><br/>
+    <div id="cpn03">
+        <p>{{ total }}</p>
+        <button-counter v-on:increment="incrementTotal">aaaa</button-counter>
+        <button-counter v-on:increment="incrementTotal">bbbb</button-counter>
+    </div>
+
+    <hr/><br/>
+    <div id="cpn04">
+        <currency-input v-model="price"></currency-input>
+    </div>
+
+    <hr/><br/>
+    <div id="cpn05">
+        <div>
+            <h1>我是父组件的标题</h1>
+            <my-components>
+                <p>这是一些初始内容</p>
+                <p>这是更多的初始内容</p>
+            </my-components>
+        </div>
+    </div>
+
+    <hr/><br/>
+    <div id="cpn06">
+        <div>
+            <h1>这里是06号组件</h1>
+            <app-layout>
+                <h1 solt="header">这里是一个页面标题Header</h1>
+                <p>这里内容是一个段落</p>
+                <p>另一个段落</p>
+                <p>哈哈哈</p>
+                <p solt="footer" style="color: red;">这里是底部啦</p>
+            </app-layout>
+        </div>
+    </div>
 </body>
 </html>
+<script type="text/javascript">
+    // 注册
+    Vue.component('my-component', {
+        template: '<div>A custom component!</div>'
+    });
+
+    var vm01 = new Vue({
+        el: '#cpn01',
+        data: {
+
+        }
+    });
+
+
+    Vue.component('child', {
+        // 声明Props
+        props: ['myMessage'],
+        // 就像data一样, prop可以用在模板内
+        // 同样也可以在vm实例中向"this.message"这样使用
+        template: '<span>{{ myMessage }}</span>'
+    });
+    var vm02 = new Vue({
+        el: '#cpn02',
+        data: {
+            message: '哈哈哈'
+        }
+    });
+
+    Vue.component('example', {
+        props: {
+            // 基础类型检测 （`null` 意思是任何类型都可以
+            propA: Number,
+            // 多种类型(String, Number)
+            propB: [String, Number],
+            // 必传也是字符串
+            propC: {
+                type: String,
+                required: true
+            },
+            // 数字,默认值
+            propD: {
+                type: Number,
+                default: 10
+            },
+            // 数组/对象的默认值应当由一个工厂函数返回
+            propE: {
+                type: Object,
+                default: function () {
+                    return {message: 'hello'}
+                }
+            },
+            // 自定义验证函数
+            propF: {
+                validator: function (value) {
+                    return value > 10;
+                }
+            }
+        }
+    });
+
+    Vue.component('button-counter', {
+        template: '<div><a v-on:click.prevent="test" href="http://www.baidu.com">百度</a></div>',
+        data: function() {
+            return {
+                counter: 0
+            }
+        },
+        methods: {
+            increment: function () {
+                this.counter += 1;
+                this.$emit('increment');
+            },
+            test: function() {
+                alert(11);
+            }
+        }
+    });
+
+    var vm03 = new Vue({
+        el: '#cpn03',
+        data: {
+            total: 0
+        },
+        methods: {
+            incrementTotal: function () {
+                this.total += 1;
+            }
+        }
+    });
+
+
+    Vue.component('currency-input', {
+        template: '\
+                    <span>\
+                      $\
+                      <input\
+                        ref="input"\
+                        v-bind:value="value"\
+                        v-on:input="updateValue($event.target.value)"\
+                      >\
+                    </span>\
+                  ',
+        props: ['value'],
+        methods: {
+            // 不是直接更新值，而是使用此方法来对输入值进行格式化和位数限制
+            updateValue: function (value) {
+                var formattedValue = value
+                // 删除两侧的空格符
+                        .trim()
+                        // 保留 2 小数位
+                        .slice(0, value.indexOf('.') + 3)
+                // 如果值不统一，手动覆盖以保持一致
+                if (formattedValue !== value) {
+                    this.$refs.input.value = formattedValue
+                }
+                // 通过 input 事件发出数值
+                this.$emit('input', Number(formattedValue))
+            }
+        }
+    });
+    var vm04 = new Vue({
+        el: '#cpn04',
+        data: {
+
+        }
+    });
+
+    Vue.component('my-components', {
+        template: '<div><h2>我是子组件的标题</h2><slot>只有在没有要分发的内容时才会显示。</slot> </div>'
+    });
+
+    var vm05 = new Vue({
+        el: '#cpn05',
+        data: {
+
+        }
+    });
+
+    Vue.component('app-layout', {
+        template: '<div class="container"> <header> <slot name="header"></slot> </header> <main> <slot></slot> </main> <footer> <slot name="footer"></slot> </footer> </div>'
+    });
+
+    var vm06 = new Vue({
+        el: '#cpn06',
+        data: {
+
+        }
+    });
+</script>
